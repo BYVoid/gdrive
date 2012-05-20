@@ -68,6 +68,7 @@
 		D73210E91568D00900D84B9C /* auth.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = auth.h; sourceTree = "<group>"; };
 		D73210EA1568EE6600D84B9C /* xml.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xml.h; sourceTree = "<group>"; };
 		D73210EB1568EE7200D84B9C /* xml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xml.cpp; sourceTree = "<group>"; };
+		D773961F156922880099DBBC /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; path = readme.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +95,7 @@
 		D71090B91567476100DF71BC = {
 			isa = PBXGroup;
 			children = (
+				D773961F156922880099DBBC /* readme.md */,
 				D73210E51568043E00D84B9C /* libxml2.dylib */,
 				D71090E815674F1200DF71BC /* libcurl.dylib */,
 				D71090C61567476100DF71BC /* gdrive */,
