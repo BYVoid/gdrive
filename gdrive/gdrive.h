@@ -1,23 +1,27 @@
-/*
- *  gdrive.h
- *  gdrive
- *
- *  Created by 郭 家寶 on 12/5/19.
- *  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
- *
- */
-
 #ifndef gdrive_
 #define gdrive_
+
+#include "gdrive_types.h"
+#include "folder.h"
 
 /* The classes below are exported */
 #pragma GCC visibility push(default)
 
-class gdrive
+namespace GDrive {
+
+class GDrive
 {
-	public:
-		void HelloWorld(const char *);
+public:
+    GDrive();
+    ~GDrive();
+    string authorize(const string email, const string password);
+    Folder get_folder(const string path);
+    
+private:
+    void * priv;
 };
+    
+}
 
 #pragma GCC visibility pop
 #endif
