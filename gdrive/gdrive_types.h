@@ -7,6 +7,7 @@
 #include <vector>
 #include <list>
 #include <stdexcept>
+#include <cassert>
 
 using std::string;
 using std::map;

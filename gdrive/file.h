@@ -6,22 +6,28 @@
 
 namespace GDrive {
 
+class Folder;
+
 class File {
 public:
-    static File parse_from_xml(string & xml);
+    static list<File *> get_by_title(const string title);
+    static File * factory(Dict & attrs);
     
     File();
+    virtual ~File();
     
     enum Type {
         FILE,
         FOLDER,
     };
     
-//protected:
+    //protected:
+    Type type;
     string id;
     string title;
     string ctime, mtime, atime;
-    Type type;
+    Folder * parent;
+    string parent_id;
     
     Request request;
 };

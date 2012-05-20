@@ -19,7 +19,7 @@ public:
     list<XmlNode> children() const;
     list<XmlNode> children(string name) const;
     
-private:
+//private:
     void free_doc();
     
     string xml;

@@ -7,7 +7,16 @@ using namespace GDrive;
 Folder::Folder()
 {
     type = FOLDER;
+    parent = NULL;
     children_retrieved = false;
+}
+
+Folder::~Folder()
+{
+    for (list<File *>::iterator i = children.begin(); i != children.end(); i++) {
+        File * file = *i;
+        delete file;
+    }
 }
 
 Folder * Folder::get_by_id(const string & id)
@@ -22,7 +31,6 @@ Folder * Folder::get_by_id(const string & id)
         Dict attributes = request.get_folder(id);
         if (request.get_error().length() > 0) {
             throw runtime_error(request.get_error());
-            return NULL;
         }
         folder = new Folder();
         folder->id = attributes["id"];
@@ -30,6 +38,7 @@ Folder * Folder::get_by_id(const string & id)
         folder->ctime = attributes["ctime"];
         folder->mtime = attributes["mtime"];
         folder->atime = attributes["atime"];
+        folder->parent_id = attributes["parent_id"];
     }
     folder->get_children();
     return folder;
@@ -41,25 +50,12 @@ void Folder::get_children()
     
     if (request.get_error().length() > 0) {
         throw runtime_error(request.get_error());
-        return;
     }
     
     for (list<Dict>::iterator i = children_attrs.begin(); i != children_attrs.end(); i++) {
-        Dict & attr = *i;
-        File * child;
-        
-        if (attr["type"] == "folder") {
-            child = new Folder();
-        } else {
-            child = new File();
-        }
-        
-        child->id = attr["id"];
-        child->title = attr["title"];
-        child->ctime = attr["ctime"];
-        child->mtime = attr["mtime"];
-        child->atime = attr["atime"];
-        
+        File * child = factory(*i);
+        child->parent = this;
+        child->parent_id = id;
         children.push_back(child);
     }
     
