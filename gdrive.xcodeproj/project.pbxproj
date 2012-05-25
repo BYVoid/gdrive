@@ -8,12 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		D7097143156FCBBB006C3033 /* gdocfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7097142156FCBBB006C3033 /* gdocfile.cpp */; };
-		D71090CE1567476100DF71BC /* gdrive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D71090CD1567476100DF71BC /* gdrive.cpp */; };
 		D71090DC1567482700DF71BC /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D71090DB1567482700DF71BC /* main.cpp */; };
 		D71090E21567487700DF71BC /* gdrive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D71090C41567476100DF71BC /* gdrive.dylib */; };
 		D71090E6156749B000DF71BC /* request.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D71090E5156749B000DF71BC /* request.cpp */; };
 		D71090E915674F1200DF71BC /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D71090E815674F1200DF71BC /* libcurl.dylib */; };
-		D71090EB15675A7E00DF71BC /* gdrive_priv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D71090EA15675A7E00DF71BC /* gdrive_priv.cpp */; };
 		D71090ED15675F5B00DF71BC /* folder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D71090EC15675F5B00DF71BC /* folder.cpp */; };
 		D71090F2156764C000DF71BC /* file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D71090F1156764C000DF71BC /* file.cpp */; };
 		D71090F51567662100DF71BC /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D71090F41567662100DF71BC /* utils.cpp */; };
@@ -51,14 +49,11 @@
 		D71090C91567476100DF71BC /* gdriveProj.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = gdriveProj.xcconfig; sourceTree = "<group>"; };
 		D71090CA1567476100DF71BC /* gdriveTarget.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = gdriveTarget.xcconfig; sourceTree = "<group>"; };
 		D71090CB1567476100DF71BC /* gdrive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gdrive.h; sourceTree = "<group>"; };
-		D71090CC1567476100DF71BC /* gdrive_priv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gdrive_priv.h; sourceTree = "<group>"; };
-		D71090CD1567476100DF71BC /* gdrive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gdrive.cpp; sourceTree = "<group>"; };
 		D71090D81567482700DF71BC /* gdrivefs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gdrivefs; sourceTree = BUILT_PRODUCTS_DIR; };
 		D71090DB1567482700DF71BC /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		D71090E5156749B000DF71BC /* request.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = request.cpp; sourceTree = "<group>"; };
 		D71090E7156749C900DF71BC /* request.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = request.h; sourceTree = "<group>"; };
 		D71090E815674F1200DF71BC /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
-		D71090EA15675A7E00DF71BC /* gdrive_priv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gdrive_priv.cpp; sourceTree = "<group>"; };
 		D71090EC15675F5B00DF71BC /* folder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = folder.cpp; sourceTree = "<group>"; };
 		D71090EE15675F6500DF71BC /* folder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = folder.h; sourceTree = "<group>"; };
 		D71090EF1567641300DF71BC /* file.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = file.h; sourceTree = "<group>"; };
@@ -125,10 +120,7 @@
 				D71090EF1567641300DF71BC /* file.h */,
 				D71090EC15675F5B00DF71BC /* folder.cpp */,
 				D71090EE15675F6500DF71BC /* folder.h */,
-				D71090CD1567476100DF71BC /* gdrive.cpp */,
 				D71090CB1567476100DF71BC /* gdrive.h */,
-				D71090EA15675A7E00DF71BC /* gdrive_priv.cpp */,
-				D71090CC1567476100DF71BC /* gdrive_priv.h */,
 				D71090F01567647B00DF71BC /* gdrive_types.h */,
 				D71090C91567476100DF71BC /* gdriveProj.xcconfig */,
 				D71090CA1567476100DF71BC /* gdriveTarget.xcconfig */,
@@ -231,9 +223,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D71090CE1567476100DF71BC /* gdrive.cpp in Sources */,
 				D71090E6156749B000DF71BC /* request.cpp in Sources */,
-				D71090EB15675A7E00DF71BC /* gdrive_priv.cpp in Sources */,
 				D71090ED15675F5B00DF71BC /* folder.cpp in Sources */,
 				D71090F2156764C000DF71BC /* file.cpp in Sources */,
 				D71090F51567662100DF71BC /* utils.cpp in Sources */,

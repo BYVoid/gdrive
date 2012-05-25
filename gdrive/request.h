@@ -4,6 +4,8 @@
 #include "gdrive_types.h"
 #include "xml.h"
 
+#pragma GCC visibility push(hidden)
+
 namespace GDrive {
 
 class Request {
@@ -26,5 +28,7 @@ private:
 };
 
 }
+
+#pragma GCC visibility pop
 
 #endif

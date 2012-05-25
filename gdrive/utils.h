@@ -3,6 +3,8 @@
 
 #include "gdrive_types.h"
 
+#pragma GCC visibility push(hidden)
+
 namespace GDrive {
     
 class Utils
@@ -13,5 +15,7 @@ public:
 };
 
 }
+
+#pragma GCC visibility pop
 
 #endif
