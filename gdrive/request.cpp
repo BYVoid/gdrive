@@ -101,7 +101,7 @@ XmlNode Request::get_resource(string url)
     return XmlNode::parse(xml);
 }
 
-Dict Request::get_folder(const string & id)
+Dict Request::get_folder(const string id)
 {
     if (id.compare(0, 7, "folder:") != 0) {
         throw new runtime_error("Invalid folder id");
@@ -132,40 +132,66 @@ Dict Request::get_folder(const string & id)
     return attrs;
 }
 
+Dict parse_entry(XmlNode & entry)
+{
+    Dict attrs;
+    attrs["title"] = entry.child("title").contents();
+    attrs["id"] = entry.child("resourceId").contents();
+    attrs["ctime"] = entry.child("published").contents();
+    attrs["mtime"] = entry.child("edited").contents();
+    attrs["atime"] = entry.child("lastViewed").contents();
+    
+    string raw_type = entry.child("content").attr("type");
+    if (raw_type == "application/atom+xml;type=feed") {
+        attrs["type"] = "folder";
+    } else {
+        attrs["type"] = "file";
+    }
+    
+    string parent_id = "root";
+    list<XmlNode> link_nodes = entry.children("link");
+    for (list<XmlNode>::iterator i = link_nodes.begin(); i != link_nodes.end(); i++) {
+        XmlNode & node = *i;
+        if (node.attr("rel") == "http://schemas.google.com/docs/2007#parent") {
+            parent_id = node.attr("href");
+            const char * pos = strstr(parent_id.c_str(), "folder%3A");
+            assert(pos != NULL);
+            parent_id = pos + 9;
+        }
+    }
+    attrs["parent_id"] = "folder:" + parent_id;
+    return attrs;
+}
+
+Dict Request::get_file(const string id)
+{
+    string url = "https://docs.google.com/feeds/default/private/full/" + id;
+    XmlNode root = get_resource(url);
+    
+    Dict attrs;
+    
+    if (root.name() ==  "errors") {
+        XmlNode reason_node = root.child("error").child("internalReason");
+        if (reason_node.is_null()) {
+            attrs["error"] = "Unknown error";
+        } else {
+            attrs["error"] = reason_node.contents();
+        }
+        return attrs;
+    }
+    
+    attrs = parse_entry(root);
+    
+    return attrs;
+}
+
 list<Dict> parse_entries(XmlNode & node)
 {
     list<Dict> files;
     list<XmlNode> entires_nodes = node.children("entry");
     for (list<XmlNode>::iterator i = entires_nodes.begin(); i != entires_nodes.end(); i++) {
         XmlNode & entry = *i;
-        
-        Dict attrs;
-        attrs["title"] = entry.child("title").contents();
-        attrs["id"] = entry.child("resourceId").contents();
-        attrs["ctime"] = entry.child("published").contents();
-        attrs["mtime"] = entry.child("edited").contents();
-        attrs["atime"] = entry.child("lastViewed").contents();
-        
-        string raw_type = entry.child("content").attr("type");
-        if (raw_type == "application/atom+xml;type=feed") {
-            attrs["type"] = "folder";
-        } else {
-            attrs["type"] = "file";
-        }
-        
-        string parent_id = "root";
-        list<XmlNode> link_nodes = entry.children("link");
-        for (list<XmlNode>::iterator i = link_nodes.begin(); i != link_nodes.end(); i++) {
-            XmlNode & node = *i;
-            if (node.attr("rel") == "http://schemas.google.com/docs/2007#parent") {
-                parent_id = node.attr("href");
-                const char * pos = strstr(parent_id.c_str(), "folder%3A");
-                assert(pos != NULL);
-                parent_id = pos + 9;
-            }
-        }
-        attrs["parent_id"] = "folder:" + parent_id;
-        
+        Dict attrs = parse_entry(entry);
         files.push_back(attrs);
     }
     return files;

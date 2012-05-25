@@ -11,10 +11,12 @@ class Folder;
 class File {
 public:
     static list<File *> get_by_title(const string title);
+    static File * get_by_path(const string path);
     static File * factory(Dict & attrs);
     
     File();
     virtual ~File();
+    Folder * get_parent();
     
     enum Type {
         FILE,

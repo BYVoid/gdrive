@@ -8,7 +8,8 @@ namespace GDrive {
     
 class Folder : public File {
 public:
-    static Folder * get_by_id(const string & id);
+    static Folder * get_by_id(const string id);
+    static Folder * get_by_path(const string path);
     
     virtual ~Folder();
     void get_children();

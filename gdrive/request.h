@@ -12,7 +12,8 @@ public:
     ~Request();
     const string get_error();
     string do_request(const string url, Dict * fields, Dict * headers);
-    Dict get_folder(const string & id);
+    Dict get_folder(const string id);
+    Dict get_file(const string id);    
     list<Dict> get_folder_contents(const string id);
     list<Dict> get_files_by_title(const string title);
     

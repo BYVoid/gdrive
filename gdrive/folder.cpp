@@ -19,13 +19,15 @@ Folder::~Folder()
     }
 }
 
-Folder * Folder::get_by_id(const string & id)
+Folder * Folder::get_by_id(const string id)
 {
     Folder * folder = NULL;
-    if (id == "folder%3Aroot") {
+    if (id == "folder:root") {
         folder = new Folder();
         folder->id = id;
-        folder->title = '/';
+        folder->title = "";
+        folder->parent_id = "";
+        folder->parent = (Folder *) -1;
     } else {
         Request request;
         Dict attributes = request.get_folder(id);
@@ -60,4 +62,13 @@ void Folder::get_children()
     }
     
     children_retrieved = true;
+}
+
+Folder * Folder::get_by_path(const string path)
+{
+    File * file = File::get_by_path(path);
+    if (file->type != File::FOLDER) {
+        throw runtime_error("Not a folder");
+    }
+    return (Folder *) file;
 }
