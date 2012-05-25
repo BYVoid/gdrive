@@ -27,6 +27,22 @@ Folder * File::get_parent()
     return this->parent;
 }
 
+File::Type File::get_type()
+{
+    return type;
+}
+
+string File::to_json()
+{
+    ostringstream buffer;
+    buffer << '{';
+    buffer << "\"id\": " << '"' << id << '"' << ',';
+    buffer << "\"title\": " << '"' << title << '"' << ',';
+    buffer << "\"parent_id\": " << '"' << parent_id << '"';
+    buffer << '}';
+    return buffer.str();
+}
+
 File * File::factory(Dict & attrs)
 {
     File * file = NULL;

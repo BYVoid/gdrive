@@ -2,6 +2,7 @@
 #define gdrive_gdrive_types_h
 
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <map>
 #include <vector>
@@ -14,6 +15,7 @@ using std::map;
 using std::vector;
 using std::list;
 using std::runtime_error;
+using std::ostringstream;
 
 typedef map<string, string> Dict;
 typedef vector<string> StrArray;

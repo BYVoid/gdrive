@@ -7,14 +7,17 @@
 namespace GDrive {
     
 class Folder : public File {
+    friend class File;
+    
 public:
     static Folder * get_by_id(const string id);
     static Folder * get_by_path(const string path);
     
     virtual ~Folder();
-    void get_children();
+    list<File *> get_children();
+    virtual string to_json();
     
-//protected:
+protected:
     Folder();
     
     bool children_retrieved;

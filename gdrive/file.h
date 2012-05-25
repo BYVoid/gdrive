@@ -9,21 +9,27 @@ namespace GDrive {
 class Folder;
 
 class File {
+    friend class Folder;
+
 public:
-    static list<File *> get_by_title(const string title);
-    static File * get_by_path(const string path);
-    static File * factory(Dict & attrs);
-    
-    File();
-    virtual ~File();
-    Folder * get_parent();
-    
     enum Type {
         FILE,
         FOLDER,
     };
     
+    static File * factory(Dict & attrs);
+    static list<File *> get_by_title(const string title);
+    static File * get_by_path(const string path);
+    
+    File();
+    virtual ~File();
+    Folder * get_parent();
+    Type get_type();
+    virtual string to_json();
+    
     //protected:
+    
+protected:
     Type type;
     string id;
     string title;
@@ -32,6 +38,7 @@ public:
     string parent_id;
     
     Request request;
+    
 };
 
 }

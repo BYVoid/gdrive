@@ -19,6 +19,28 @@ Folder::~Folder()
     }
 }
 
+string Folder::to_json()
+{
+    ostringstream buffer;
+    buffer << '{';
+    buffer << "\"id\": " << '"' << id << '"' << ',';
+    buffer << "\"title\": " << '"' << title << '"' << ',';
+    buffer << "\"parent_id\": " << '"' << parent_id << '"' << ',';
+    buffer << "\"children\": " << '[';
+    if (children_retrieved) {
+        for (list<File *>::iterator i = children.begin(); i != children.end(); i++) {
+            File * child = *i;
+            buffer << child->to_json();
+            if (child != children.back()) {
+                buffer << ',';
+            }
+        }
+    }
+    buffer << ']';
+    buffer << '}';
+    return buffer.str();
+}
+
 Folder * Folder::get_by_id(const string id)
 {
     Folder * folder = NULL;
@@ -46,7 +68,7 @@ Folder * Folder::get_by_id(const string id)
     return folder;
 }
 
-void Folder::get_children()
+list<File *> Folder::get_children()
 {
     list<Dict> children_attrs = request.get_folder_contents(id);
     
@@ -62,6 +84,7 @@ void Folder::get_children()
     }
     
     children_retrieved = true;
+    return children;
 }
 
 Folder * Folder::get_by_path(const string path)
