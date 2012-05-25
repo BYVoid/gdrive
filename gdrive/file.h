@@ -32,6 +32,7 @@ public:
     Type get_type();
     virtual string to_json();
     virtual string name();
+    virtual string contents();
     
     //protected:
     
@@ -42,6 +43,7 @@ protected:
     string ctime, mtime, atime;
     Folder * parent;
     string parent_id;
+    string url;
     
     Request request;
     

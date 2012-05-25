@@ -49,6 +49,11 @@ string File::name()
     return title;
 }
 
+string File::contents()
+{
+    return request.get_contents(url);
+}
+
 File * File::factory(Dict & attrs)
 {
     File * file = NULL;
@@ -73,6 +78,7 @@ File * File::factory(Dict & attrs)
     file->mtime = attrs["mtime"];
     file->atime = attrs["atime"];
     file->parent_id = attrs["parent_id"];
+    file->url = attrs["url"];
     
     return file;
 }
@@ -118,7 +124,7 @@ File * File::get_by_path(const string path)
     
     // filter files iterately by parent
     int depth = 1;
-    while (files_cands.size() > 1 && path_secs.size() >= 1) {
+    do {
         list<File *> files_cands_new;
         string parent_name = path_secs.back();
         for (list<File *>::iterator i = files_cands.begin(); i != files_cands.end(); i++) {
@@ -135,7 +141,7 @@ File * File::get_by_path(const string path)
         path_secs.pop_back();
         files_cands = files_cands_new;
         depth++;
-    }
+    } while (files_cands.size() > 1 && path_secs.size() >= 1);
     
     File * file = NULL;
     // target file found

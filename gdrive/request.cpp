@@ -89,16 +89,20 @@ string Request::do_request(const string url, Dict * fields, Dict * headers)
     return buffer;
 }
 
-XmlNode Request::get_resource(string url)
+string Request::get_contents(const string url)
 {
     Dict headers;
     headers["GData-Version"] = "3.0";
     headers["Authorization"] = "GoogleLogin auth=" + Auth::instance().get_auth_string();
-    string xml = do_request(url, NULL, &headers);
     if (error.length() > 0) {
         throw runtime_error(error);
     }
-    return XmlNode::parse(xml);
+    return do_request(url, NULL, &headers);
+}
+
+XmlNode Request::get_resource(string url)
+{
+    return XmlNode::parse(get_contents(url));
 }
 
 Dict Request::get_folder(const string id)
@@ -140,6 +144,7 @@ Dict parse_entry(XmlNode & entry)
     attrs["ctime"] = entry.child("published").contents();
     attrs["mtime"] = entry.child("edited").contents();
     attrs["atime"] = entry.child("lastViewed").contents();
+    attrs["url"] = entry.child("content").attr("src");
     
     string raw_type = entry.child("content").attr("type");
     if (raw_type == "application/atom+xml;type=feed") {

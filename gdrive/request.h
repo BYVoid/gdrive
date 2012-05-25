@@ -7,17 +7,19 @@
 namespace GDrive {
 
 class Request {
+    friend class Auth;
 public:
     Request();
     ~Request();
     const string get_error();
-    string do_request(const string url, Dict * fields, Dict * headers);
+    string get_contents(const string url);
     Dict get_folder(const string id);
     Dict get_file(const string id);    
     list<Dict> get_folder_contents(const string id);
     list<Dict> get_files_by_title(const string title);
     
-//private:
+private:
+    string do_request(const string url, Dict * fields, Dict * headers);
     XmlNode get_resource(string url);
     
     string error;
