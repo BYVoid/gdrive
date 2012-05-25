@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D7097143156FCBBB006C3033 /* gdocfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7097142156FCBBB006C3033 /* gdocfile.cpp */; };
 		D71090CE1567476100DF71BC /* gdrive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D71090CD1567476100DF71BC /* gdrive.cpp */; };
 		D71090DC1567482700DF71BC /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D71090DB1567482700DF71BC /* main.cpp */; };
 		D71090E21567487700DF71BC /* gdrive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D71090C41567476100DF71BC /* gdrive.dylib */; };
@@ -44,6 +45,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D7097140156FCBAF006C3033 /* gdocfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gdocfile.h; sourceTree = "<group>"; };
+		D7097142156FCBBB006C3033 /* gdocfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gdocfile.cpp; sourceTree = "<group>"; };
 		D71090C41567476100DF71BC /* gdrive.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gdrive.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		D71090C91567476100DF71BC /* gdriveProj.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = gdriveProj.xcconfig; sourceTree = "<group>"; };
 		D71090CA1567476100DF71BC /* gdriveTarget.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = gdriveTarget.xcconfig; sourceTree = "<group>"; };
@@ -68,7 +71,7 @@
 		D73210E91568D00900D84B9C /* auth.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = auth.h; sourceTree = "<group>"; };
 		D73210EA1568EE6600D84B9C /* xml.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xml.h; sourceTree = "<group>"; };
 		D73210EB1568EE7200D84B9C /* xml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xml.cpp; sourceTree = "<group>"; };
-		D773961F156922880099DBBC /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; path = readme.md; sourceTree = "<group>"; };
+		D773961F156922880099DBBC /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +138,8 @@
 				D71090F3156765CB00DF71BC /* utils.h */,
 				D73210EB1568EE7200D84B9C /* xml.cpp */,
 				D73210EA1568EE6600D84B9C /* xml.h */,
+				D7097140156FCBAF006C3033 /* gdocfile.h */,
+				D7097142156FCBBB006C3033 /* gdocfile.cpp */,
 			);
 			path = gdrive;
 			sourceTree = "<group>";
@@ -234,6 +239,7 @@
 				D71090F51567662100DF71BC /* utils.cpp in Sources */,
 				D73210E81568CFFF00D84B9C /* auth.cpp in Sources */,
 				D73210EC1568EE7200D84B9C /* xml.cpp in Sources */,
+				D7097143156FCBBB006C3033 /* gdocfile.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

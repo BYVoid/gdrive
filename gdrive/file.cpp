@@ -1,5 +1,6 @@
 #include "file.h"
 #include "folder.h"
+#include "gdocfile.h"
 #include "utils.h"
 
 using namespace GDrive;
@@ -43,17 +44,29 @@ string File::to_json()
     return buffer.str();
 }
 
+string File::name()
+{
+    return title;
+}
+
 File * File::factory(Dict & attrs)
 {
     File * file = NULL;
     
     if (attrs["type"] == "folder") {
         file = new Folder();
+    } else if (attrs["id"].compare(0, 8, "document")) {
+        file = new GDocFile(DOCUMENT);
+    } else if (attrs["id"].compare(0, 7, "drawing")) {
+        file = new GDocFile(DRAWING);
+    } else if (attrs["id"].compare(0, 11, "spreadsheet")) {
+        file = new GDocFile(SPREADSHEET);
+    } else if (attrs["id"].compare(0, 12, "presentation")) {
+        file = new GDocFile(PRESENTATION);
     } else {
         file = new File();
     }
     
-    new File();
     file->id = attrs["id"];
     file->title = attrs["title"];
     file->ctime = attrs["ctime"];

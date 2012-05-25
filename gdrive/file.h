@@ -7,6 +7,7 @@
 namespace GDrive {
 
 class Folder;
+class GDocFile;
 
 class File {
     friend class Folder;
@@ -15,6 +16,10 @@ public:
     enum Type {
         FILE,
         FOLDER,
+        DOCUMENT,
+        DRAWING,
+        SPREADSHEET,
+        PRESENTATION,
     };
     
     static File * factory(Dict & attrs);
@@ -26,6 +31,7 @@ public:
     Folder * get_parent();
     Type get_type();
     virtual string to_json();
+    virtual string name();
     
     //protected:
     

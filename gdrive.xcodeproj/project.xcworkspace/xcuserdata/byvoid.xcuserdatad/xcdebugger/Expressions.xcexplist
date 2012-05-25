@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "GDrive::XmlNode::parse(std::string):xml.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "GDrive::XmlNode::free_doc():xml.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(xmlDocPtr) doc">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "GDrive::Folder::get_by_id(std::string const&amp;):folder.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "GDrive::File::parse_from_xml(std::string&amp;):file.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "GDrive::Request::get_resource(std::string&amp;):request.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "xml">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
