@@ -69,6 +69,7 @@
 		D73210EA1568EE6600D84B9C /* xml.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xml.h; sourceTree = "<group>"; };
 		D73210EB1568EE7200D84B9C /* xml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xml.cpp; sourceTree = "<group>"; };
 		D773961F156922880099DBBC /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.md; sourceTree = "<group>"; };
+		D7B0F5F61570BF1B002C698C /* fuse_settings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fuse_settings.h; sourceTree = "<group>"; };
 		D7E892DA156FF20F00CDD5C3 /* libfuse.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o"; name = libfuse.dylib; path = "Library/Frameworks/MacFUSE.framework 1/Versions/A/Resources/Debug/libfuse.dylib.dSYM/Contents/Resources/DWARF/libfuse.dylib"; sourceTree = SDKROOT; };
 		D7E892DC156FF31000CDD5C3 /* libfuse4x.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfuse4x.dylib; path = usr/local/lib/libfuse4x.dylib; sourceTree = SDKROOT; };
 		D7E892DE1570913700CDD5C3 /* filecache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = filecache.cpp; sourceTree = "<group>"; };
@@ -151,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				D71090DB1567482700DF71BC /* main.cpp */,
+				D7B0F5F61570BF1B002C698C /* fuse_settings.h */,
 			);
 			path = gdrivefs;
 			sourceTree = "<group>";

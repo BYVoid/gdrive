@@ -6,8 +6,6 @@ This project contains two parts: libgdrive and gdrivefs.
 * libgdrive is a C++ wrapper of Google Drive/Docs API.
 * gdrivefs uses libgdrive and fuse to imeplement filesystem interfaces.
 
-Google Drive Filesystem
-
 Requires
 ========
 
@@ -24,4 +22,14 @@ gdrivefs
 Usage
 =====
 
-Under development.
+ ./gdrivefs mountpoint [options]
+ 
+ FUSE options:
+     -d   -o debug          enable debug output (implies -f)
+     -f                     foreground operation
+     -s                     disable multi-threaded operation
+
+Warning
+=======
+
+This project is under development. The quaility is currently not asured. Use it at your own risk.
