@@ -165,6 +165,8 @@ File * File::get_by_path(const string path)
     }
     
     string filename = path_secs.back();
+    filename = Utils::filter_extension(filename);
+    
     path_secs.pop_back();
     list<File *> files = get_by_title(filename);
     list<File *> files_cands = files;

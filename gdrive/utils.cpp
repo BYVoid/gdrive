@@ -70,3 +70,32 @@ string Utils::url_escape(const string url)
     }
     return buffer.str();
 }
+
+string Utils::get_main_filename(const string filename)
+{
+    size_t pos = filename.rfind('.');
+    if (pos == string::npos) {
+        return filename;
+    }
+    
+    return filename.substr(0, pos);
+}
+
+string Utils::get_extension(const string filename)
+{
+    size_t pos = filename.rfind('.');
+    if (pos == string::npos) {
+        return "";
+    }
+    
+    return filename.c_str() + pos + 1;
+}
+
+string Utils::filter_extension(const string filename)
+{
+    string ext = get_extension(filename);
+    if (ext == "gdoc" || ext == "gslides" || ext == "gdraw" || ext == "gsheet") {
+        return get_main_filename(filename);
+    }
+    return filename;
+}
