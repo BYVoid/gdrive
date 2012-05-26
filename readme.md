@@ -34,10 +34,12 @@ You should also create a file in working directory namd "user.txt" containing em
 For example:
 
 user.txt
-    byvoid.kcp@gmail.com
+
+    myemailaddress@gmail.com
     MyPlainPassWord
 
 And run:
+
     mkdir gdrive
     ./gdrivefs gdrive
 
