@@ -100,8 +100,8 @@ string Request::get_contents(const string url)
 
 XmlNode Request::get_resource(string url)
 {
-    /*
     std::clog << "Retrieving " << url << std::endl;
+    /*
     XmlNode node = XmlNode::parse(get_contents(url));
     std::clog << "Retrieved " << url << std::endl;
     return node;

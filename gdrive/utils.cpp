@@ -42,30 +42,11 @@ string Utils::url_escape(const string url)
     ostringstream buffer;
     size_t len = url.length();
     for (size_t i = 0; i < len; i++) {
-        switch (url[i]) {
-            case ' ':
-                buffer << '+';
-                break;
-            case '+':
-                buffer << "%20";
-                break;
-            case '/':
-                buffer << "%2F";
-                break;
-            case '?':
-                buffer << "%3F";
-                break;
-            case '%':
-                buffer << "%25";
-                break;
-            case '#':
-                buffer << "%23";
-                break;
-            case '&':
-                buffer << "%26";
-                break;
-            default:
-                buffer << url[i];
+        if (url[i] == ' ') {
+            buffer << '+';
+        } else {
+            unsigned char c = url[i];
+            buffer << '%' << std::hex << (int) c;
         }
     }
     return buffer.str();
