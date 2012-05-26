@@ -210,8 +210,7 @@ list<Dict> Request::get_folder_contents(const string id)
 
 list<Dict> Request::get_files_by_title(const string title)
 {
-    //TODO escape title
-    string url = "https://docs.google.com/feeds/default/private/full?title-exact=true&showfolders=true&title=" + title;
+    string url = "https://docs.google.com/feeds/default/private/full?title-exact=true&showfolders=true&title=" + Utils::url_escape(title);
     XmlNode root = get_resource(url);
     return parse_entries(root);
 }

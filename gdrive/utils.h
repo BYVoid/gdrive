@@ -12,6 +12,7 @@ class Utils
 public:
     static string read_from_file(const string filename);
     static StrArray str_split(const string buffer, const string separator);
+    static string url_escape(const string url);
 };
 
 }

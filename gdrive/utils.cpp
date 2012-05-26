@@ -36,3 +36,37 @@ StrArray Utils::str_split(const string buffer, const string separator)
     array.push_back(p_buffer);
     return array;
 }
+
+string Utils::url_escape(const string url)
+{
+    ostringstream buffer;
+    size_t len = url.length();
+    for (size_t i = 0; i < len; i++) {
+        switch (url[i]) {
+            case ' ':
+                buffer << '+';
+                break;
+            case '+':
+                buffer << "%20";
+                break;
+            case '/':
+                buffer << "%2F";
+                break;
+            case '?':
+                buffer << "%3F";
+                break;
+            case '%':
+                buffer << "%25";
+                break;
+            case '#':
+                buffer << "%23";
+                break;
+            case '&':
+                buffer << "%26";
+                break;
+            default:
+                buffer << url[i];
+        }
+    }
+    return buffer.str();
+}
