@@ -12,6 +12,7 @@ File::File()
 {
     type = FILE;
     parent = NULL;
+    m_contents_retrieved = false;
 }
 
 File::~File()
@@ -59,7 +60,11 @@ string File::name()
 
 string File::contents()
 {
-    return request.get_contents(url);
+    if (!m_contents_retrieved) {
+        m_contents = request.get_contents(url);
+        m_contents_retrieved = true;
+    }
+    return m_contents;
 }
 
 File * File::factory(Dict & attrs)

@@ -28,8 +28,6 @@ public:
     static File * get_by_id(const string id);
     static File * get_by_path(const string path);
     
-    File();
-    virtual ~File();
     string get_id();
     Folder * get_parent();
     Type get_type();
@@ -37,10 +35,11 @@ public:
     virtual string name();
     virtual string contents();
     
-    //protected:
-    
 protected:
     static File * factory(Dict & attrs);
+    
+    File();
+    virtual ~File();
     
     Type type;
     string id;
@@ -49,6 +48,8 @@ protected:
     Folder * parent;
     string parent_id;
     string url;
+    bool m_contents_retrieved;
+    string m_contents;
     
     Request request;
     
