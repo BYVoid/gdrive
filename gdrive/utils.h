@@ -11,7 +11,7 @@ class Utils
 {
 public:
     static string read_from_file(const string filename);
-    static StrArray str_split(string buffer, const string separator);
+    static StrArray str_split(const string buffer, const string separator);
 };
 
 }

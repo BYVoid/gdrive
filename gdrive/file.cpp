@@ -2,8 +2,11 @@
 #include "folder.h"
 #include "gdocfile.h"
 #include "utils.h"
+#include "filecache.h"
 
 using namespace GDrive;
+
+File * File::NOT_FOUND = (File *) -1;
 
 File::File()
 {
@@ -14,6 +17,11 @@ File::File()
 File::~File()
 {
     
+}
+
+string File::get_id()
+{
+    return id;
 }
 
 Folder * File::get_parent()
@@ -58,21 +66,23 @@ File * File::factory(Dict & attrs)
 {
     File * file = NULL;
     
+    string id = attrs["id"];
+    
     if (attrs["type"] == "folder") {
         file = new Folder();
-    } else if (attrs["id"].compare(0, 8, "document")) {
+    } else if (id.compare(0, 8, "document") == 0) {
         file = new GDocFile(DOCUMENT);
-    } else if (attrs["id"].compare(0, 7, "drawing")) {
+    } else if (id.compare(0, 7, "drawing") == 0) {
         file = new GDocFile(DRAWING);
-    } else if (attrs["id"].compare(0, 11, "spreadsheet")) {
+    } else if (id.compare(0, 11, "spreadsheet") == 0) {
         file = new GDocFile(SPREADSHEET);
-    } else if (attrs["id"].compare(0, 12, "presentation")) {
+    } else if (id.compare(0, 12, "presentation") == 0) {
         file = new GDocFile(PRESENTATION);
     } else {
         file = new File();
     }
     
-    file->id = attrs["id"];
+    file->id = id;
     file->title = attrs["title"];
     file->ctime = attrs["ctime"];
     file->mtime = attrs["mtime"];
@@ -96,13 +106,45 @@ list<File *> File::get_by_title(const string title)
     for (list<Dict>::iterator i = files_attrs.begin(); i != files_attrs.end(); i++) {
         File * file = factory(*i);
         files.push_back(file);
+        FileCache::instance().save(file);
     }
     
     return files;
 }
 
+File * File::get_by_id(const string id)
+{
+    File * file = FileCache::instance().get_by_id(id);
+    if (file != File::NOT_FOUND) {
+        return file;
+    }
+    
+    if (id == "folder:root") {
+        file = new Folder();
+        file->id = id;
+        file->title = "";
+        file->parent_id = "";
+        file->parent = (Folder *) -1;
+        FileCache::instance().save(file, "/");
+    } else {
+        Request request;
+        Dict attrs = request.get_folder(id);
+        if (request.get_error().length() > 0) {
+            throw runtime_error(request.get_error());
+        }
+        file = factory(attrs);
+        FileCache::instance().save(file);
+    }
+    return file;
+}
+
 File * File::get_by_path(const string path)
 {
+    File * file = FileCache::instance().get_by_path(path);
+    if (file != File::NOT_FOUND) {
+        return file;
+    }
+    
     if (path == "/") {
         return Folder::get_by_id("folder:root");
     }
@@ -143,19 +185,21 @@ File * File::get_by_path(const string path)
         depth++;
     } while (files_cands.size() > 1 && path_secs.size() >= 1);
     
-    File * file = NULL;
+    file = NULL;
     // target file found
     if (files_cands.size() == 1) {
         file = files_cands.front();
     }
     
-    // release memory allocated by File::get_by_title
+    // cache all other files
     for (list<File *>::iterator i = files.begin(); i != files.end(); i++) {
         File * file_cand = *i;
         if (file_cand != file) { // except for the target file
-            delete file_cand;
+            FileCache::instance().save(file_cand);
         }
     }
+    
+    FileCache::instance().save(file, path);
     
     return file;
 }

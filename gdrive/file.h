@@ -22,12 +22,15 @@ public:
         PRESENTATION,
     };
     
-    static File * factory(Dict & attrs);
+    static File * NOT_FOUND;
+    
     static list<File *> get_by_title(const string title);
+    static File * get_by_id(const string id);
     static File * get_by_path(const string path);
     
     File();
     virtual ~File();
+    string get_id();
     Folder * get_parent();
     Type get_type();
     virtual string to_json();
@@ -37,6 +40,8 @@ public:
     //protected:
     
 protected:
+    static File * factory(Dict & attrs);
+    
     Type type;
     string id;
     string title;

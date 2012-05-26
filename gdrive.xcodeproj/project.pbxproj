@@ -18,6 +18,8 @@
 		D73210E61568043E00D84B9C /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D73210E51568043E00D84B9C /* libxml2.dylib */; };
 		D73210E81568CFFF00D84B9C /* auth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D73210E71568CFFF00D84B9C /* auth.cpp */; };
 		D73210EC1568EE7200D84B9C /* xml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D73210EB1568EE7200D84B9C /* xml.cpp */; };
+		D7E892DD156FF31000CDD5C3 /* libfuse4x.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D7E892DC156FF31000CDD5C3 /* libfuse4x.dylib */; };
+		D7E892DF1570913700CDD5C3 /* filecache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7E892DE1570913700CDD5C3 /* filecache.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,10 @@
 		D73210EA1568EE6600D84B9C /* xml.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xml.h; sourceTree = "<group>"; };
 		D73210EB1568EE7200D84B9C /* xml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xml.cpp; sourceTree = "<group>"; };
 		D773961F156922880099DBBC /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.md; sourceTree = "<group>"; };
+		D7E892DA156FF20F00CDD5C3 /* libfuse.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o"; name = libfuse.dylib; path = "Library/Frameworks/MacFUSE.framework 1/Versions/A/Resources/Debug/libfuse.dylib.dSYM/Contents/Resources/DWARF/libfuse.dylib"; sourceTree = SDKROOT; };
+		D7E892DC156FF31000CDD5C3 /* libfuse4x.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfuse4x.dylib; path = usr/local/lib/libfuse4x.dylib; sourceTree = SDKROOT; };
+		D7E892DE1570913700CDD5C3 /* filecache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = filecache.cpp; sourceTree = "<group>"; };
+		D7E892E01570914000CDD5C3 /* filecache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = filecache.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7E892DD156FF31000CDD5C3 /* libfuse4x.dylib in Frameworks */,
 				D71090E21567487700DF71BC /* gdrive.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -93,6 +100,8 @@
 		D71090B91567476100DF71BC = {
 			isa = PBXGroup;
 			children = (
+				D7E892DC156FF31000CDD5C3 /* libfuse4x.dylib */,
+				D7E892DA156FF20F00CDD5C3 /* libfuse.dylib */,
 				D773961F156922880099DBBC /* readme.md */,
 				D73210E51568043E00D84B9C /* libxml2.dylib */,
 				D71090E815674F1200DF71BC /* libcurl.dylib */,
@@ -132,6 +141,8 @@
 				D73210EA1568EE6600D84B9C /* xml.h */,
 				D7097140156FCBAF006C3033 /* gdocfile.h */,
 				D7097142156FCBBB006C3033 /* gdocfile.cpp */,
+				D7E892DE1570913700CDD5C3 /* filecache.cpp */,
+				D7E892E01570914000CDD5C3 /* filecache.h */,
 			);
 			path = gdrive;
 			sourceTree = "<group>";
@@ -230,6 +241,7 @@
 				D73210E81568CFFF00D84B9C /* auth.cpp in Sources */,
 				D73210EC1568EE7200D84B9C /* xml.cpp in Sources */,
 				D7097143156FCBBB006C3033 /* gdocfile.cpp in Sources */,
+				D7E892DF1570913700CDD5C3 /* filecache.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +330,11 @@
 		D71090E01567482700DF71BC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)$(LOCAL_LIBRARY_DIR)/Frameworks/MacFUSE.framework 1/Versions/A/Resources/Debug/libfuse.dylib.dSYM/Contents/Resources/DWARF\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -325,6 +342,11 @@
 		D71090E11567482700DF71BC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)$(LOCAL_LIBRARY_DIR)/Frameworks/MacFUSE.framework 1/Versions/A/Resources/Debug/libfuse.dylib.dSYM/Contents/Resources/DWARF\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

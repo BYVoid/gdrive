@@ -5,7 +5,6 @@
 
 using namespace GDrive;
 
-
 static size_t write_memory_callback(char *data, size_t size, size_t nmemb, string *buffer)
 {
 	size_t result = 0;
@@ -25,7 +24,6 @@ Request::~Request()
 {
 
 }
-
 
 const string Request::get_error()
 {
@@ -102,38 +100,13 @@ string Request::get_contents(const string url)
 
 XmlNode Request::get_resource(string url)
 {
+    /*
+    std::clog << "Retrieving " << url << std::endl;
+    XmlNode node = XmlNode::parse(get_contents(url));
+    std::clog << "Retrieved " << url << std::endl;
+    return node;
+     */
     return XmlNode::parse(get_contents(url));
-}
-
-Dict Request::get_folder(const string id)
-{
-    if (id.compare(0, 7, "folder:") != 0) {
-        throw new runtime_error("Invalid folder id");
-    }
-    
-    string url = "https://docs.google.com/feeds/default/private/full/folder%3A";
-    url += id.c_str() + 7;
-    XmlNode root = get_resource(url);
-    
-    Dict attrs;
-    
-    if (root.name() ==  "errors") {
-        XmlNode reason_node = root.child("error").child("internalReason");
-        if (reason_node.is_null()) {
-            attrs["error"] = "Unknown error";
-        } else {
-            attrs["error"] = reason_node.contents();
-        }
-        return attrs;
-    }
-    
-    attrs["title"] = root.child("title").contents();
-    attrs["id"] = root.child("resourceId").contents();
-    attrs["ctime"] = root.child("published").contents();
-    attrs["mtime"] = root.child("edited").contents();
-    attrs["atime"] = root.child("lastViewed").contents();
-    
-    return attrs;
 }
 
 Dict parse_entry(XmlNode & entry)
@@ -165,6 +138,32 @@ Dict parse_entry(XmlNode & entry)
         }
     }
     attrs["parent_id"] = "folder:" + parent_id;
+    return attrs;
+}
+
+Dict Request::get_folder(const string id)
+{
+    if (id.compare(0, 7, "folder:") != 0) {
+        throw new runtime_error("Invalid folder id");
+    }
+    
+    string url = "https://docs.google.com/feeds/default/private/full/folder%3A";
+    url += id.c_str() + 7;
+    XmlNode root = get_resource(url);
+    
+    Dict attrs;
+    
+    if (root.name() ==  "errors") {
+        XmlNode reason_node = root.child("error").child("internalReason");
+        if (reason_node.is_null()) {
+            attrs["error"] = "Unknown error";
+        } else {
+            attrs["error"] = reason_node.contents();
+        }
+        return attrs;
+    }
+    
+    attrs = parse_entry(root);
     return attrs;
 }
 

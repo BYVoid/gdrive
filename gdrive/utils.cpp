@@ -17,7 +17,7 @@ string Utils::read_from_file(const string filename)
 }
 
 
-StrArray Utils::str_split(string buffer, const string separator)
+StrArray Utils::str_split(const string buffer, const string separator)
 {
     StrArray array;
     size_t separator_len = separator.length();
@@ -27,8 +27,10 @@ StrArray Utils::str_split(string buffer, const string separator)
         pos = strstr(p_buffer, separator.c_str());
         if (pos == NULL)
             break;
+        char temp = *pos;
         *pos = '\0';
         array.push_back(p_buffer);
+        *pos = temp;
         p_buffer = pos + separator_len;
     };
     array.push_back(p_buffer);
