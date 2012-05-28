@@ -34,6 +34,7 @@ public:
     virtual string to_json();
     virtual string name();
     virtual string contents();
+    virtual size_t size();
     
 protected:
     static File * factory(Dict & attrs);

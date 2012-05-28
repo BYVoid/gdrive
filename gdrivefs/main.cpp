@@ -26,7 +26,7 @@ int gdrivefs_getattr(const char * path, struct stat * stbuf)
         }
         
         stbuf->st_nlink = 1;
-        stbuf->st_size = file->contents().length();
+        stbuf->st_size = file->size();
     }
     
     return 0;
@@ -76,7 +76,7 @@ int gdrivefs_read(const char * path, char * buf, size_t size, off_t offset, stru
         return -ENOENT;
     }
     
-    size_t len = file->contents().length();
+    size_t len = file->size();
     if (offset < len) {
         if (offset + size > len) {
             size = len - offset;

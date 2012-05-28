@@ -67,6 +67,11 @@ string File::contents()
     return m_contents;
 }
 
+size_t File::size()
+{
+    return contents().length();
+}
+
 File * File::factory(Dict & attrs)
 {
     File * file = NULL;
