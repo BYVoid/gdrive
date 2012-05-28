@@ -76,6 +76,11 @@ size_t File::size()
     return m_size;
 }
 
+void File::rename(const string new_path)
+{
+    // TODO rename
+}
+
 File * File::factory(Dict & attrs)
 {
     File * file = NULL;

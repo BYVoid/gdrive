@@ -89,11 +89,28 @@ int gdrivefs_read(const char * path, char * buf, size_t size, off_t offset, stru
     return size;
 }
 
+int gdrivefs_rename(const char * path_from, const char * path_to)
+{
+    File * file = File::get_by_path(path_from);
+    if (file == NULL) {
+        return -ENOENT;
+    }
+    
+    try {
+        file->rename(path_to);
+    } catch (runtime_error & err) {
+        return -ENOENT;
+    }
+    
+    return 0;
+}
+
 static struct fuse_operations gdrivefs_oper = {
     .getattr = gdrivefs_getattr,
     .readdir = gdrivefs_readdir,
     .open = gdrivefs_open,
     .read = gdrivefs_read,
+    .rename = gdrivefs_rename,
 };
 
 struct gdrivefs_config {
