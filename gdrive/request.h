@@ -15,6 +15,7 @@ public:
     ~Request();
     const string get_error();
     string get_contents(const string url);
+    size_t get_length(const string url);
     Dict get_folder(const string id);
     Dict get_file(const string id);    
     list<Dict> get_folder_contents(const string id);
@@ -22,6 +23,7 @@ public:
     
 private:
     string do_request(const string url, Dict * fields, Dict * headers);
+    Dict do_head(const string url, Dict * headers);
     XmlNode get_resource(string url);
     
     string error;

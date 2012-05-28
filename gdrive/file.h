@@ -51,6 +51,8 @@ protected:
     string url;
     bool m_contents_retrieved;
     string m_contents;
+    bool m_size_retrieved;
+    size_t m_size;
     
     Request request;
     

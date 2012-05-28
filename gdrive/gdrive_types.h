@@ -15,6 +15,7 @@ using std::map;
 using std::vector;
 using std::list;
 using std::runtime_error;
+using std::istringstream;
 using std::ostringstream;
 
 typedef map<string, string> Dict;

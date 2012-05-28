@@ -5,9 +5,19 @@
 
 using namespace GDrive;
 
-static size_t write_memory_callback(char *data, size_t size, size_t nmemb, string *buffer)
+size_t write_memory_callback(char * data, size_t size, size_t nmemb, string * buffer)
 {
 	size_t result = 0;
+	if (buffer != NULL) {
+		buffer->append(data, size * nmemb);
+		result = size * nmemb;
+	}
+	return result;
+}
+
+size_t header_handler(char * data, size_t size, size_t nmemb, string * buffer)
+{
+    size_t result = 0;
 	if (buffer != NULL) {
 		buffer->append(data, size * nmemb);
 		result = size * nmemb;
@@ -28,6 +38,61 @@ Request::~Request()
 const string Request::get_error()
 {
     return error;
+}
+
+
+Dict Request::do_head(const string url, Dict * headers)
+{
+    CURL *curl;
+    CURLcode res;
+    struct curl_slist * headerlist = NULL;
+    string head_buffer;
+    Dict res_headers;
+    error.clear();
+    
+    curl = curl_easy_init();
+    if (!curl) {
+        error = "cURL initialization failed";
+        return res_headers;
+    }
+    
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
+    curl_easy_setopt(curl, CURLOPT_HEADERDATA, &head_buffer);
+    curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, header_handler);
+    
+    // Generate custom headers
+    if (headers != NULL) {
+        for (Dict::const_iterator i = headers->begin(); i != headers->end(); i++) {
+            string header = i->first + ": ";
+            header += i->second;
+            headerlist = curl_slist_append(headerlist, header.c_str());
+        }
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerlist);
+    }
+    
+    // Perform query
+    res = curl_easy_perform(curl);
+    
+    if (res == CURLE_OK) {
+        StrArray lines = Utils::str_split(head_buffer, "\n");
+        for (StrArray::iterator i = lines.begin(); i != lines.end(); i++) {
+            string & line = *i;
+            StrArray secs = Utils::str_split(line, ": ");
+            if (secs.size() == 2) {
+                string key = secs[0];
+                string value = secs[1];
+                res_headers[key] = value;
+            }
+        }
+    } else {
+        error = curl_easy_strerror(res);
+    }
+    
+    curl_easy_cleanup(curl);
+    curl_slist_free_all(headerlist);
+    
+    return res_headers;
 }
 
 string Request::do_request(const string url, Dict * fields, Dict * headers)
@@ -85,6 +150,23 @@ string Request::do_request(const string url, Dict * fields, Dict * headers)
     curl_slist_free_all(headerlist);
     
     return buffer;
+}
+
+size_t Request::get_length(const string url)
+{
+    Dict headers;
+    headers["GData-Version"] = "3.0";
+    headers["Authorization"] = "GoogleLogin auth=" + Auth::instance().get_auth_string();
+    Dict res_headers = do_head(url, &headers);
+    
+    if (res_headers.count("Content-Length")) {
+        size_t len;
+        istringstream buffer(res_headers["Content-Length"]);
+        buffer >> len;
+        return len;
+    }
+    error = "No length information";
+    return 0;
 }
 
 string Request::get_contents(const string url)

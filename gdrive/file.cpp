@@ -69,7 +69,11 @@ string File::contents()
 
 size_t File::size()
 {
-    return contents().length();
+    if (!m_size_retrieved) {
+        m_size = request.get_length(url);
+        m_size_retrieved = true;
+    }
+    return m_size;
 }
 
 File * File::factory(Dict & attrs)
