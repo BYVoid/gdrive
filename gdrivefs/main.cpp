@@ -1,8 +1,8 @@
-#include "fuse_settings.h"
+#include "settings.h"
 #include "gdrive.h"
 #include <fuse.h>
+#include <fuse/fuse_opt.h>
 #include <errno.h>
-#include <fstream>
 
 using namespace GDrive;
 
@@ -89,19 +89,79 @@ int gdrivefs_read(const char * path, char * buf, size_t size, off_t offset, stru
     return size;
 }
 
-static struct fuse_operations hello_oper = {
+static struct fuse_operations gdrivefs_oper = {
     .getattr = gdrivefs_getattr,
     .readdir = gdrivefs_readdir,
     .open = gdrivefs_open,
     .read = gdrivefs_read,
 };
 
-int main(int argc, char * argv[])
+struct gdrivefs_config {
+    char * email;
+    char * password;
+};
+
+enum {
+    KEY_HELP,
+    KEY_VERSION,
+};
+
+#define GDRIVEFS_OPT(t, p, v) { t, offsetof(struct gdrivefs_config, p), v }
+
+static struct fuse_opt gdrivefs_opts[] = {
+    GDRIVEFS_OPT("--password=%s", password, 0),
+    GDRIVEFS_OPT("--email=%s", email, 0),
+    FUSE_OPT_KEY("-V", KEY_VERSION),
+    FUSE_OPT_KEY("--version", KEY_VERSION),
+    FUSE_OPT_KEY("-h", KEY_HELP),
+    FUSE_OPT_KEY("--help", KEY_HELP),
+    FUSE_OPT_END
+};
+
+static int gdrivefs_opt_proc(void *data, const char *arg, int key, struct fuse_args *outargs)
 {
-    string email, password;
-    std::ifstream user_file("user.txt");
-    user_file >> email >> password;
+    switch (key) {
+        case KEY_HELP:
+            fprintf(stderr,
+                    "usage: %s mountpoint [options]\n"
+                    "\n"
+                    "GDriveFS options (required):\n"
+                    "    --email=EMAIL           email address of your google account\n"
+                    "    --password=PASSWORD     password of your google account\n"
+                    "\n"
+                    "general options:\n"
+                    "    -o opt,[opt...]        mount options\n"
+                    "    -h   --help            print help\n"
+                    "    -V   --version         print version\n"
+                    "\n",
+                    outargs->argv[0]
+            );
+            fuse_opt_add_arg(outargs, "-ho");
+            fuse_main(outargs->argc, outargs->argv, &gdrivefs_oper, NULL);
+            exit(1);
+            
+        case KEY_VERSION:
+            fprintf(stderr, "GDriveFS version %s\n", VERSION);
+            fuse_opt_add_arg(outargs, "--version");
+            fuse_main(outargs->argc, outargs->argv, &gdrivefs_oper, NULL);
+            exit(0);
+    }
+    return 1;
+}
+
+int main(int argc, char *argv[])
+{
+    struct fuse_args args = FUSE_ARGS_INIT(argc, argv);
+    struct gdrivefs_config conf;
+    memset(&conf, 0, sizeof(conf));
+
+    fuse_opt_parse(&args, &conf, gdrivefs_opts, gdrivefs_opt_proc);
+    if (conf.email == NULL || conf.password == NULL) {
+        fprintf(stderr, "Must specify email address and password. Use --help to get help.\n");
+        return 1;
+    }
     
-    Auth::instance().authorize(email, password);
-    return fuse_main(argc, argv, &hello_oper, NULL);
+    Auth::instance().authorize(conf.email, conf.password);
+    
+    return fuse_main(args.argc, args.argv, &gdrivefs_oper, NULL);
 }

@@ -16,7 +16,6 @@ string Utils::read_from_file(const string filename)
     return buf;
 }
 
-
 StrArray Utils::str_split(const string buffer, const string separator)
 {
     StrArray array;

@@ -24,24 +24,24 @@ Usage
 
     gdrivefs mountpoint [options]
     
-    FUSE options:
-       -d   -o debug          enable debug output (implies -f)
-       -f                     foreground operation
-       -s                     disable multi-threaded operation
+    GDriveFS options (required):
+        --email=EMAIL           email address of your google account
+        --password=PASSWORD     password of your google account
 
-You should also create a file in working directory namd "user.txt" containing email and password of your Google accounts.
+    general options:
+        -o opt,[opt...]        mount options
+        -h   --help            print help
+        -V   --version         print version
+
+    FUSE options:
+        -d   -o debug          enable debug output (implies -f)
+        -f                     foreground operation
+        -s                     disable multi-threaded operation
 
 For example:
 
-user.txt
-
-    myemailaddress@gmail.com
-    MyPlainPassWord
-
-And run:
-
     mkdir gdrive
-    ./gdrivefs gdrive
+    ./gdrivefs gdrive --email=myemailaddress@gmail.com --password="MyPlainPassWord"
 
 Warning
 =======
