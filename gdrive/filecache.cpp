@@ -45,6 +45,8 @@ void FileCache::save(File * file, string path)
     if (file != NULL) {
         save(file);
     }
+    if (path[path.length() - 1] == '/') {
+        path = path.substr(0, path.length() - 1);
+    }
     path_cache[path] = file;
 }
-

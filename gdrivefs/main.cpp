@@ -11,7 +11,7 @@ int gdrivefs_getattr(const char * path, struct stat * stbuf)
     memset(stbuf, 0, sizeof(struct stat));
     
     if (strcmp(path, "/") == 0) {
-        stbuf->st_mode = S_IFDIR | 0555;
+        stbuf->st_mode = S_IFDIR | 0777;
         stbuf->st_nlink = 2;
     }
     else {
@@ -22,7 +22,7 @@ int gdrivefs_getattr(const char * path, struct stat * stbuf)
         
         stbuf->st_mode = S_IFREG | 0444;
         if (file->get_type() == File::FOLDER) {
-            stbuf->st_mode = S_IFDIR | 0555;
+            stbuf->st_mode = S_IFDIR | 0777;
         }
         
         stbuf->st_nlink = 1;
@@ -105,12 +105,23 @@ int gdrivefs_rename(const char * path_from, const char * path_to)
     return 0;
 }
 
+int gdrivefs_mkdir(const char * path, mode_t mode)
+{
+    Folder * folder = Folder::make_folder(path);
+    if (folder == NULL) {
+        return -ENOENT;
+    }
+    
+    return 0;
+}
+
 static struct fuse_operations gdrivefs_oper = {
     .getattr = gdrivefs_getattr,
     .readdir = gdrivefs_readdir,
     .open = gdrivefs_open,
     .read = gdrivefs_read,
     .rename = gdrivefs_rename,
+    .mkdir = gdrivefs_mkdir,
 };
 
 struct gdrivefs_config {

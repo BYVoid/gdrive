@@ -1,6 +1,7 @@
 #include "gdrive_types.h"
 #include "folder.h"
 #include "request.h"
+#include "utils.h"
 #include "filecache.h"
 
 using namespace GDrive;
@@ -85,4 +86,51 @@ Folder * Folder::get_by_path(const string path)
         throw runtime_error("Not a folder");
     }
     return (Folder *) file;
+}
+
+
+Folder * Folder::make_folder(const string path)
+{
+    StrArray path_secs = Utils::str_split(path, "/");
+    
+    if (path_secs.size() <= 1) {
+        throw runtime_error("Invalid path: " + path);
+    }
+    
+    string folder = path_secs.back();
+    string parent_path = path.substr(0, path.length() - folder.length());
+    
+    Folder * parent = NULL;
+    
+    try {
+        parent = get_by_path(parent_path);
+    } catch (runtime_error &e) {
+        return NULL;
+    }
+    
+    return parent->make_subfolder(folder);
+}
+
+Folder * Folder::make_subfolder(const string name)
+{
+    Request request;
+    Dict attrs = request.make_sub_folder(id, name);
+    if (request.get_error().length() > 0) {
+        throw runtime_error(request.get_error());
+    }
+    File * folder = factory(attrs);
+    assert(folder->type == File::FOLDER);
+    FileCache::instance().save(folder, folder->path());
+    this->add_child(folder);
+    return (Folder *) folder;
+}
+
+void Folder::add_child(File * child)
+{
+    for (list<File *>::iterator i = children.begin(); i != children.end(); i++) {
+        if (*i == child) {
+            return;
+        }
+    }
+    children.push_back(child);
 }

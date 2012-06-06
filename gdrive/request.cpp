@@ -95,6 +95,50 @@ Dict Request::do_head(const string url, Dict * headers)
     return res_headers;
 }
 
+string Request::do_raw_post(const string url, const string post_data, Dict * headers)
+{
+    CURL *curl;
+    CURLcode res;
+    struct curl_slist * headerlist = NULL;
+    string buffer;
+    error.clear();
+    
+    curl = curl_easy_init();
+    if (!curl) {
+        error = "cURL initialization failed";
+        return "";
+    }
+    
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_memory_callback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
+    curl_easy_setopt(curl, CURLOPT_POST, 1);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data.c_str()); 
+    
+    // Generate custom headers
+    if (headers != NULL) {
+        for (Dict::const_iterator i = headers->begin(); i != headers->end(); i++) {
+            string header = i->first + ": ";
+            header += i->second;
+            headerlist = curl_slist_append(headerlist, header.c_str());
+        }
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerlist);
+    }
+    
+    // Perform query
+    res = curl_easy_perform(curl);
+    
+    if (res != 0) {
+        error = curl_easy_strerror(res);
+        buffer = "";
+    }
+    
+    curl_easy_cleanup(curl);
+    curl_slist_free_all(headerlist);
+    
+    return buffer;
+}
+
 string Request::do_request(const string url, Dict * fields, Dict * headers)
 {
     CURL *curl;
@@ -178,6 +222,20 @@ string Request::get_contents(const string url)
         throw runtime_error(error);
     }
     return do_request(url, NULL, &headers);
+}
+
+string Request::post_contents(const string url, const string post_data)
+{
+    Dict headers;
+    headers["GData-Version"] = "3.0";
+    headers["Authorization"] = "GoogleLogin auth=" + Auth::instance().get_auth_string();
+    headers["Content-Length"] = Utils::to_string(post_data.length());
+    headers["Content-Type"] = "application/atom+xml";
+    
+    if (error.length() > 0) {
+        throw runtime_error(error);
+    }
+    return do_raw_post(url, post_data, &headers);
 }
 
 XmlNode Request::get_resource(string url)
@@ -295,4 +353,27 @@ list<Dict> Request::get_files_by_title(const string title)
     string url = "https://docs.google.com/feeds/default/private/full?title-exact=true&showfolders=true&title=" + Utils::url_escape(title);
     XmlNode root = get_resource(url);
     return parse_entries(root);
+}
+
+Dict Request::make_sub_folder(const string id, const string subname)
+{
+    string url = "https://docs.google.com/feeds/default/private/full/" + id + "/contents";
+    string data = "<?xml version='1.0' encoding='UTF-8'?><entry xmlns=\"http://www.w3.org/2005/Atom\"><category scheme=\"http://schemas.google.com/g/2005#kind\" term=\"http://schemas.google.com/docs/2007#folder\"/><title>" + subname + "</title></entry>";
+    XmlNode root = XmlNode::parse(post_contents(url, data));
+    
+    Dict attrs;
+    if (root.name() ==  "errors") {
+        XmlNode reason_node = root.child("error").child("internalReason");
+        string error;
+        if (reason_node.is_null()) {
+            error = "Unknown error";
+        } else {
+            error = reason_node.contents();
+        }
+        attrs["error"] = error;
+        return attrs;
+    }
+    
+    attrs = parse_entry(root);
+    return attrs;
 }

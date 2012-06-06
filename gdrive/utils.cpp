@@ -79,3 +79,10 @@ string Utils::filter_extension(const string filename)
     }
     return filename;
 }
+
+string Utils::to_string(const int num)
+{
+    std::ostringstream buffer;
+    buffer << num;
+    return buffer.str();
+}
