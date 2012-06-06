@@ -6,6 +6,19 @@
 
 using namespace GDrive;
 
+struct gdrivefs_config {
+    char * email;
+    char * password;
+};
+
+struct gdrivefs_config conf;
+
+void * gdrivefs_init(struct fuse_conn_info *conn)
+{
+    Auth::instance().authorize(conf.email, conf.password);
+    return NULL;
+}
+
 int gdrivefs_getattr(const char * path, struct stat * stbuf)
 {
     memset(stbuf, 0, sizeof(struct stat));
@@ -116,17 +129,13 @@ int gdrivefs_mkdir(const char * path, mode_t mode)
 }
 
 static struct fuse_operations gdrivefs_oper = {
+    .init = gdrivefs_init,
     .getattr = gdrivefs_getattr,
     .readdir = gdrivefs_readdir,
     .open = gdrivefs_open,
     .read = gdrivefs_read,
     .rename = gdrivefs_rename,
     .mkdir = gdrivefs_mkdir,
-};
-
-struct gdrivefs_config {
-    char * email;
-    char * password;
 };
 
 enum {
@@ -180,7 +189,6 @@ static int gdrivefs_opt_proc(void *data, const char *arg, int key, struct fuse_a
 int main(int argc, char *argv[])
 {
     struct fuse_args args = FUSE_ARGS_INIT(argc, argv);
-    struct gdrivefs_config conf;
     memset(&conf, 0, sizeof(conf));
 
     fuse_opt_parse(&args, &conf, gdrivefs_opts, gdrivefs_opt_proc);
@@ -189,7 +197,6 @@ int main(int argc, char *argv[])
         return 1;
     }
     
-    Auth::instance().authorize(conf.email, conf.password);
     
     return fuse_main(args.argc, args.argv, &gdrivefs_oper, NULL);
 }
