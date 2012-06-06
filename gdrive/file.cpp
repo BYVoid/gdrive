@@ -20,7 +20,7 @@ File::~File()
     
 }
 
-string File::get_id()
+string File::get_id() const
 {
     return id;
 }
@@ -37,12 +37,12 @@ Folder * File::get_parent()
     return this->parent;
 }
 
-File::Type File::get_type()
+File::Type File::get_type() const
 {
     return type;
 }
 
-string File::to_json()
+string File::to_json() const
 {
     ostringstream buffer;
     buffer << '{';
@@ -53,7 +53,7 @@ string File::to_json()
     return buffer.str();
 }
 
-string File::name()
+string File::name() const
 {
     return title;
 }
@@ -76,6 +76,22 @@ size_t File::size()
     return m_size;
 }
 
+string File::path()
+{
+    StrArray path_secs;
+    File * cur = this;
+    while (cur->parent_id != "") {
+        path_secs.push_back(cur->name());
+        cur = cur->get_parent();
+    }
+    ostringstream buffer;
+    buffer << '/';
+    for (StrArray::reverse_iterator i = path_secs.rbegin(); i != path_secs.rend(); i++) {
+        buffer << *i << '/';
+    }
+    return buffer.str();
+}
+
 void File::rename(const string new_path)
 {
     // TODO rename
@@ -84,6 +100,10 @@ void File::rename(const string new_path)
 File * File::factory(Dict & attrs)
 {
     File * file = NULL;
+    
+    if (attrs.count("error")) {
+        throw new runtime_error(attrs["error"]);
+    }
     
     string id = attrs["id"];
     

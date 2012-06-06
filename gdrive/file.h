@@ -28,13 +28,14 @@ public:
     static File * get_by_id(const string id);
     static File * get_by_path(const string path);
     
-    string get_id();
+    string get_id() const;
     Folder * get_parent();
-    Type get_type();
-    virtual string to_json();
-    virtual string name();
+    Type get_type() const;
+    virtual string to_json() const;
+    virtual string name() const;
     virtual string contents();
     virtual size_t size();
+    virtual string path();
     virtual void rename(const string new_path);
     
 protected:
