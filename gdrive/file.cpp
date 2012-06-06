@@ -97,6 +97,17 @@ void File::rename(const string new_path)
     // TODO rename
 }
 
+void File::remove()
+{
+    Request request;
+    request.remove_file(this->id);
+    if (this->parent) {
+        this->parent->remove_child(this);
+    }
+    FileCache::instance().remove(this);
+    //delete this;
+}
+
 File * File::factory(Dict & attrs)
 {
     File * file = NULL;

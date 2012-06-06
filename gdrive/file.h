@@ -37,6 +37,7 @@ public:
     virtual size_t size();
     virtual string path();
     virtual void rename(const string new_path);
+    virtual void remove();
     
 protected:
     static File * factory(Dict & attrs);

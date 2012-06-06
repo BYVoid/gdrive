@@ -18,13 +18,14 @@ public:
     list<File *> get_children();
     virtual string to_json();
     Folder * make_subfolder(const string name);
+    void add_child(File * child);
+    void remove_child(File * child);
     
 protected:
     Folder();
     
     bool children_retrieved;
     list<File *> children;
-    void add_child(File * child);
 };
 
 }

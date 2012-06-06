@@ -15,6 +15,7 @@ public:
     File * get_by_path(const string path);
     void save(File * file);
     void save(File * file, string path);
+    void remove(File * file);
     
 private:
     FileCache();

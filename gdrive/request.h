@@ -22,10 +22,11 @@ public:
     list<Dict> get_folder_contents(const string id);
     list<Dict> get_files_by_title(const string title);
     Dict make_sub_folder(const string id, const string subname);
+    void remove_file(const string id);
     
 private:
     string do_request(const string url, Dict * fields, Dict * headers);
-    Dict do_head(const string url, Dict * headers);
+    Dict do_head(const string url, Dict * headers, string method);
     string do_raw_post(const string url, const string post_data, Dict * headers);
     XmlNode get_resource(string url);
     

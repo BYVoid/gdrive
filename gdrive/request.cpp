@@ -40,8 +40,7 @@ const string Request::get_error()
     return error;
 }
 
-
-Dict Request::do_head(const string url, Dict * headers)
+Dict Request::do_head(const string url, Dict * headers, const string method)
 {
     CURL *curl;
     CURLcode res;
@@ -58,6 +57,7 @@ Dict Request::do_head(const string url, Dict * headers)
     
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
+    curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, method.c_str());
     curl_easy_setopt(curl, CURLOPT_HEADERDATA, &head_buffer);
     curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, header_handler);
     
@@ -201,7 +201,7 @@ size_t Request::get_length(const string url)
     Dict headers;
     headers["GData-Version"] = "3.0";
     headers["Authorization"] = "GoogleLogin auth=" + Auth::instance().get_auth_string();
-    Dict res_headers = do_head(url, &headers);
+    Dict res_headers = do_head(url, &headers, "HEAD");
     
     if (res_headers.count("Content-Length")) {
         size_t len;
@@ -247,6 +247,19 @@ XmlNode Request::get_resource(string url)
     return node;
      */
     return XmlNode::parse(get_contents(url));
+}
+
+void Request::remove_file(const string id)
+{
+    Dict headers;
+    headers["GData-Version"] = "3.0";
+    headers["Authorization"] = "GoogleLogin auth=" + Auth::instance().get_auth_string();
+    headers["If-Match"] = "*";
+    if (error.length() > 0) {
+        throw runtime_error(error);
+    }
+    string url = "https://docs.google.com/feeds/default/private/full/" + id;
+    do_head(url, &headers, "DELETE");
 }
 
 Dict parse_entry(XmlNode & entry)

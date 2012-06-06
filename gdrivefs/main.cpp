@@ -124,7 +124,16 @@ int gdrivefs_mkdir(const char * path, mode_t mode)
     if (folder == NULL) {
         return -ENOENT;
     }
-    
+    return 0;
+}
+
+int gdrivefs_unlink(const char * path)
+{
+    File * file = File::get_by_path(path);
+    if (file == NULL) {
+        return -ENOENT;
+    }
+    file->remove();
     return 0;
 }
 
@@ -136,6 +145,8 @@ static struct fuse_operations gdrivefs_oper = {
     .read = gdrivefs_read,
     .rename = gdrivefs_rename,
     .mkdir = gdrivefs_mkdir,
+    .unlink = gdrivefs_unlink,
+    .rmdir = gdrivefs_unlink,
 };
 
 enum {
@@ -196,7 +207,6 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Must specify email address and password. Use --help to get help.\n");
         return 1;
     }
-    
     
     return fuse_main(args.argc, args.argv, &gdrivefs_oper, NULL);
 }

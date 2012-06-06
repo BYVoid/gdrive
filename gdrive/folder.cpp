@@ -127,10 +127,21 @@ Folder * Folder::make_subfolder(const string name)
 
 void Folder::add_child(File * child)
 {
+    if (!this->children_retrieved) {
+        return;
+    }
     for (list<File *>::iterator i = children.begin(); i != children.end(); i++) {
         if (*i == child) {
             return;
         }
     }
     children.push_back(child);
+}
+
+void Folder::remove_child(File * child)
+{
+    if (!this->children_retrieved) {
+        return;
+    }
+    children.remove(child);
 }

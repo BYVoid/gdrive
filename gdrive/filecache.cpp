@@ -50,3 +50,16 @@ void FileCache::save(File * file, string path)
     }
     path_cache[path] = file;
 }
+
+void FileCache::remove(File * file)
+{
+    string id = file->get_id();
+    File * cache = get_by_id(id);
+    if (cache != File::NOT_FOUND) {
+        id_cache.erase(id);
+    }
+    cache = get_by_path(file->path());
+    if (cache != File::NOT_FOUND) {
+        path_cache.erase(id);
+    }
+}
