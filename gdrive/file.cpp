@@ -87,14 +87,32 @@ string File::path()
     ostringstream buffer;
     buffer << '/';
     for (StrArray::reverse_iterator i = path_secs.rbegin(); i != path_secs.rend(); i++) {
-        buffer << *i << '/';
+        buffer << *i;
+        StrArray::reverse_iterator next_i = i + 1;
+        if (next_i != path_secs.rend()) {
+            buffer << '/';
+        }
     }
     return buffer.str();
 }
 
 void File::rename(const string new_path)
 {
-    // TODO rename
+    StrArray path_secs = Utils::str_split(new_path, "/");
+    
+    string filename = path_secs.back();
+    string parent_path = new_path.substr(0, new_path.length() - filename.length() - 1);
+    bool both_at_root = this->parent_id == "folder:root" && parent_path == "";
+    if (both_at_root || parent_path == this->get_parent()->path()) {
+        // In the same folder
+        Request request;
+        request.rename(this->id, this->m_etag, filename);
+        FileCache::instance().remove(this);
+        this->title = filename;
+        FileCache::instance().save(this);
+    } else {
+        // TODO Diffrent folders
+    }
 }
 
 void File::remove()
@@ -105,6 +123,7 @@ void File::remove()
         this->parent->remove_child(this);
     }
     FileCache::instance().remove(this);
+    // TODO delete
     //delete this;
 }
 
@@ -133,6 +152,7 @@ File * File::factory(Dict & attrs)
     }
     
     file->id = id;
+    file->m_etag = attrs["etag"];
     file->title = attrs["title"];
     file->ctime = attrs["ctime"];
     file->mtime = attrs["mtime"];

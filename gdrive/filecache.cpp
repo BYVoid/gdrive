@@ -30,7 +30,7 @@ File * FileCache::get_by_path(const string path)
 }
 
 void FileCache::save(File * file)
-{
+{ 
     string id = file->get_id();
     File * old_cache = get_by_id(id);
     if (old_cache != File::NOT_FOUND) {
@@ -38,6 +38,7 @@ void FileCache::save(File * file)
         // TODO Fix this
     }
     id_cache[id] = file;
+    path_cache[file->path()] = file;   
 }
 
 void FileCache::save(File * file, string path)

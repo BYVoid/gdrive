@@ -33,7 +33,7 @@ int gdrivefs_getattr(const char * path, struct stat * stbuf)
             return -ENOENT;
         }
         
-        stbuf->st_mode = S_IFREG | 0444;
+        stbuf->st_mode = S_IFREG | 0777;
         if (file->get_type() == File::FOLDER) {
             stbuf->st_mode = S_IFDIR | 0777;
         }
@@ -50,7 +50,8 @@ int gdrivefs_readdir(const char * path, void * buf, fuse_fill_dir_t filler, off_
     (void) offset;
     (void) fi;
     
-    Folder * folder = Folder::get_by_path(string(path));
+    Folder * folder = Folder::get_by_path(path);
+
     if (folder == NULL) {
         return -ENOENT;
     }

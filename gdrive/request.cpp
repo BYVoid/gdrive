@@ -95,7 +95,7 @@ Dict Request::do_head(const string url, Dict * headers, const string method)
     return res_headers;
 }
 
-string Request::do_raw_post(const string url, const string post_data, Dict * headers)
+string Request::do_raw_post(const string url, const string post_data, Dict * headers, string method)
 {
     CURL *curl;
     CURLcode res;
@@ -113,7 +113,8 @@ string Request::do_raw_post(const string url, const string post_data, Dict * hea
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_memory_callback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
     curl_easy_setopt(curl, CURLOPT_POST, 1);
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data.c_str()); 
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data.c_str());
+    curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, method.c_str());
     
     // Generate custom headers
     if (headers != NULL) {
@@ -235,7 +236,22 @@ string Request::post_contents(const string url, const string post_data)
     if (error.length() > 0) {
         throw runtime_error(error);
     }
-    return do_raw_post(url, post_data, &headers);
+    return do_raw_post(url, post_data, &headers, "POST");
+}
+
+string Request::put_contents(const string url, const string post_data)
+{
+    Dict headers;
+    headers["GData-Version"] = "3.0";
+    headers["Authorization"] = "GoogleLogin auth=" + Auth::instance().get_auth_string();
+    headers["Content-Length"] = Utils::to_string(post_data.length());
+    headers["Content-Type"] = "application/atom+xml";
+    headers["If-Match"] = "*";
+    
+    if (error.length() > 0) {
+        throw runtime_error(error);
+    }
+    return do_raw_post(url, post_data, &headers, "PUT");
 }
 
 XmlNode Request::get_resource(string url)
@@ -265,6 +281,7 @@ void Request::remove_file(const string id)
 Dict parse_entry(XmlNode & entry)
 {
     Dict attrs;
+    attrs["etag"] = entry.attr("etag");
     attrs["title"] = entry.child("title").contents();
     attrs["id"] = entry.child("resourceId").contents();
     attrs["ctime"] = entry.child("published").contents();
@@ -389,4 +406,23 @@ Dict Request::make_sub_folder(const string id, const string subname)
     
     attrs = parse_entry(root);
     return attrs;
+}
+
+void Request::rename(const string id, const string etag, const string newname)
+{
+    string url = "https://docs.google.com/feeds/default/private/full/" + id;
+    string data = "<?xml version='1.0' encoding='UTF-8'?><entry xmlns=\"http://www.w3.org/2005/Atom\" xmlns:docs=\"http://schemas.google.com/docs/2007\" xmlns:gd=\"http://schemas.google.com/g/2005\" gd:etag=" + etag + "><title>" + newname + "</title></entry>";
+    XmlNode root = XmlNode::parse(put_contents(url, data));
+    
+    Dict attrs;
+    if (root.name() ==  "errors") {
+        XmlNode reason_node = root.child("error").child("internalReason");
+        string error;
+        if (reason_node.is_null()) {
+            error = "Unknown error";
+        } else {
+            error = reason_node.contents();
+        }
+        throw new std::runtime_error(error);
+    }
 }

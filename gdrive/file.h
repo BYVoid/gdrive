@@ -56,6 +56,7 @@ protected:
     string m_contents;
     bool m_size_retrieved;
     size_t m_size;
+    string m_etag;
     
     Request request;
     
