@@ -46,4 +46,4 @@ For example:
 Warning
 =======
 
-This project is under development. The quaility is currently not asured. Use it at your own risk.
+This project is under development. The quaility is currently not assured. Use it at your own risk.
