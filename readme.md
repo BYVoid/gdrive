@@ -1,6 +1,14 @@
 Google Drive Filesystem
 =======================
 
+Warning
+=======
+
+Development of this project is stopped. Please try another project: https://github.com/astrada/google-drive-ocamlfuse
+
+Overview
+========
+
 This project contains two parts: libgdrive and gdrivefs.
 
 * libgdrive is a C++ wrapper of Google Drive/Docs API.
@@ -42,11 +50,6 @@ For example:
 
     mkdir gdrive
     ./gdrivefs gdrive --email=myemailaddress@gmail.com --password="MyPlainPassWord"
-
-Warning
-=======
-
-This project is under development. The quaility is currently not assured. Use it at your own risk.
 
 License
 =======
